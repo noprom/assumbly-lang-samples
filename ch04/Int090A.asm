@@ -1,10 +1,10 @@
-STACKSG	   SEGMENT  STACK 'S'
+﻿STACKSG	   SEGMENT  STACK 'S'
 	DW  64  DUP('ST')
 STACKSG   ENDS
 	
 DATA	SEGMENT
-    BUFFER   DB  60 ,? ,60  DUP(?)	;���뻺����
-    PRINT	    DB  'To input:  ' ,'$'		;����ַ���
+    BUFFER   DB  60 ,? ,60  DUP(?)	;输入缓冲区
+    PRINT	    DB  'To input:  ' ,'$'		;输出字符串
 DATA	ENDS
 
 CODE	SEGMENT
@@ -14,11 +14,11 @@ MAIN	PROC	FAR
 	MOV	AX ,DATA
 	MOV	DS ,AX
 	
-	MOV	AH ,9		;���һ����ʾ��Ϣ
+	MOV	AH ,9		;输出一串提示信息
 	LEA	DX ,PRINT
 	INT	21H
 	
-	MOV	AH ,0AH		;����һ���ַ�
+	MOV	AH ,0AH		;接收一串字符
 	LEA	DX ,BUFFER
 	INT	21H
 	

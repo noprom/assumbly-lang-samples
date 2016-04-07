@@ -1,0 +1,173 @@
+SETMODE     MACRO
+	PUSH	AX
+	MOV	AH,0
+	MOV	AL,3
+	INT	10H
+	POP	AX
+	      ENDM
+
+
+INCHAR	MACRO
+	MOV	AH,1
+	INT	21H
+	ENDM
+
+
+OUTCHAR    MACRO       X
+;输出X字符
+	PUSH	AX
+	PUSH	DX
+	MOV	AH,2
+	MOV	DL,X
+	INT	21H
+	POP	DX
+	POP	AX
+	ENDM
+
+;-----------------------------------
+;功能：保存寄存器DX、CX、BX、AX
+;-----------------------------------
+PUSHREG      MACRO
+	PUSH  DX
+	PUSH  CX
+	PUSH  BX
+	PUSH  AX
+	     ENDM
+
+;-----------------------------------
+;功能：恢复寄存器AX、BX、CX、DX
+;-----------------------------------
+POPREG	MACRO
+	POP  AX
+	POP  BX
+	POP  CX
+	POP  DX
+	ENDM
+
+;-----------------------------------
+;功能：清屏
+;-----------------------------------
+CLRSCRN    MACRO
+	PUSHREG
+	MOV  AH,6
+	MOV  AL,0
+	MOV  BH,1FH
+	MOV  CX,0
+	MOV  DX,184FH
+	INT  10H
+	POPREG
+	     ENDM
+
+;-----------------------------------
+;功能：置光标
+;入口参数：DH:DL 行,列  出口参数：无
+;-----------------------------------
+CURSOR	  MACRO
+	PUSH  AX
+	PUSH  BX
+	MOV   AH,2
+	XOR   BH,BH
+	INT   10H
+	POP   BX
+	POP   AX
+	  ENDM
+
+;-----------------------------------------
+;功能：在指定位置显示指定颜色的字符
+;入口参数：X:行,Y:列,CHAR:字符,ATTRIB:颜色
+;出口参数：无
+;-----------------------------------------
+PUTC	  MACRO	X,Y,CHAR,ATTRIB
+	PUSHREG
+	MOV  DH,X
+	MOV  DL,Y
+	CURSOR
+	MOV  AH,09H
+	MOV  AL,CHAR
+	MOV  BH,0
+	MOV  BL,ATTRIB
+	MOV  CX,1
+	INT  10H
+	POPREG
+	  ENDM
+
+;-----------------------------------------
+;功能:在指定位置显示指定颜色的字符串
+;入口参数:以$结束的字符串变量S ；出口参数:无                           
+;-----------------------------------------
+PUTS	  MACRO ROW,COL,S,ATTRIB
+	LOCAL  EXIT5
+	LOCAL  LOOP10
+	
+	PUSHREG
+	MOV    DH,ROW
+	MOV    DL,COL
+	CURSOR
+	LEA      BX,S
+	MOV    CX,80
+
+LOOP10:	MOV   AL,[BX]
+	CMP   AL,'$'
+	JE    EXIT5
+	PUTC  DH,DL,AL,ATTRIB
+	INC   DL
+	INC   BX
+	LOOP  LOOP10
+
+EXIT5:	POPREG
+	   ENDM
+
+
+WINDOW MACRO	COLOR,WLTROW,WLTCOL,WRBROW,WRBCOL
+;功能：开窗口
+	PUSHREG
+	MOV	AH,6
+	MOV	AL,0
+	MOV	BH,COLOR
+	MOV	CH,WLTROW
+	MOV	CL,WLTCOL
+	MOV	DH,WRBROW
+	MOV	DL,WRBCOL
+	INT	10H
+	POPREG
+	ENDM
+
+
+RETURN	MACRO
+	MOV	AX,4C00H
+	INT	21H
+	ENDM
+
+	
+BIN_DEC	MACRO	ASC,BIN
+	LOCAL	L1,L2
+	
+;16位二进制数－－>十进制数的ASCII码，第一个参数为
+;五个字节的十进制数缓冲区，第二个参数为要转换的二进制数
+
+	LEA	SI,ASC+4
+	MOV	AX,BIN
+	MOV	CX,10
+L1:
+	CMP	AX,0
+	JE	L2
+	MOV	DX,0
+	DIV	CX
+	OR	DL,30H
+	MOV	[SI],DL
+	DEC	SI
+	JMP	SHORT	L1
+L2:
+	NOP
+	ENDM
+
+
+DISP	MACRO	ASC
+
+;;显示十进制数
+;参数ASC为十进制数缓冲区
+
+	MOV	AH,9
+	LEA	DX,ASC
+	INT	21H
+	ENDM
