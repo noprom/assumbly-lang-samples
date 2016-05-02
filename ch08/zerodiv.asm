@@ -1,5 +1,5 @@
-DATA    	SEGMENT
-	A       DB   0		   ;³ýÊý
+ï»¿DATA    	SEGMENT
+	A       DB   0		   ;é™¤æ•°
 DATA    	ENDS
 
 CODE    	SEGMENT
@@ -10,7 +10,7 @@ MAIN    	PROC    	FAR
         	MOV     	DS,AX
         	
         	MOV     	AX,108H
-        	DIV     	A  ;±»0³ý,»á²úÉú³ý·¨´íÖÐ¶Ï
+        	DIV     	A  ;è¢«0é™¤,ä¼šäº§ç”Ÿé™¤æ³•é”™ä¸­æ–­
         	
         	MOV     	AX,4C00H
         	INT     	21H

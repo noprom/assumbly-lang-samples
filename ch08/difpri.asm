@@ -1,32 +1,32 @@
-MOV	FLAG,0	  	;Çå0ÊäÈë¹ý³Ì½áÊø±êÖ¾
+ï»¿MOV	FLAG,0	  	;æ¸…0è¾“å…¥è¿‡ç¨‹ç»“æŸæ ‡å¿—
 
-INPUT:	IN	AL,STAT1		;¶ÁÉè±¸1×´Ì¬
+INPUT:	IN	AL,STAT1		;è¯»è®¾å¤‡1çŠ¶æ€
 	TEST	AL,20H
 	JZ	DEV2
-	CALL	FAR PTR PROC1      ;Ö´ÐÐÉè±¸1µÄÊý¾ÝÊäÈë
-	
-	CMP	FLAG,1	    	;Éè±¸1ÊäÈë¹ý³Ì½áÊø£¿
-	JNZ	INPUT	    	;Î´½áÊø×ª,¼ÌÐø½øÐÐÉè±¸1ÊäÈë
+	CALL	FAR PTR PROC1      ;æ‰§è¡Œè®¾å¤‡1çš„æ•°æ®è¾“å…¥
+
+	CMP	FLAG,1	    	;è®¾å¤‡1è¾“å…¥è¿‡ç¨‹ç»“æŸï¼Ÿ
+	JNZ	INPUT	    	;æœªç»“æŸè½¬,ç»§ç»­è¿›è¡Œè®¾å¤‡1è¾“å…¥
 
 
-DEV2:	IN	AL,STAT2		;¶ÁÉè±¸2×´Ì¬
+DEV2:	IN	AL,STAT2		;è¯»è®¾å¤‡2çŠ¶æ€
 	TEST	AL,20H
 	JZ	DEV3
-	CALL	FAR PTR PROC2      ;Ö´ÐÐÉè±¸2µÄÊý¾ÝÊäÈë
-	
-	CMP	FLAG,1	   	;Éè±¸2ÊäÈë¹ý³Ì½áÊø£¿
-	JNZ	INPUT		;Î´½áÊø×ª,¼ÌÐø½øÐÐÉè±¸1ÊäÈë
-	
-	
-DEV3:	IN	AL,STAT3		;¶ÁÉè±¸3×´Ì¬
+	CALL	FAR PTR PROC2      ;æ‰§è¡Œè®¾å¤‡2çš„æ•°æ®è¾“å…¥
+
+	CMP	FLAG,1	   	;è®¾å¤‡2è¾“å…¥è¿‡ç¨‹ç»“æŸï¼Ÿ
+	JNZ	INPUT		;æœªç»“æŸè½¬,ç»§ç»­è¿›è¡Œè®¾å¤‡1è¾“å…¥
+
+
+DEV3:	IN	AL,STAT3		;è¯»è®¾å¤‡3çŠ¶æ€
 	TEST	AL,20H
 	JZ	NO_INPUT
-	CALL	FAR PTR PROC3      ;Ö´ÐÐÉè±¸3µÄÊý¾ÝÊäÈë
-	
+	CALL	FAR PTR PROC3      ;æ‰§è¡Œè®¾å¤‡3çš„æ•°æ®è¾“å…¥
+
 NO_INPUT:
-	CMP	FLAG,1		;Éè±¸3ÊäÈë¹ý³Ì½áÊø£¿
-	JNZ	INPUT		;Î´½áÊø×ª,¼ÌÐø½øÐÐÉè±¸1ÊäÈë
-		
+	CMP	FLAG,1		;è®¾å¤‡3è¾“å…¥è¿‡ç¨‹ç»“æŸï¼Ÿ
+	JNZ	INPUT		;æœªç»“æŸè½¬,ç»§ç»­è¿›è¡Œè®¾å¤‡1è¾“å…¥
+
 		.
 		.
 		.

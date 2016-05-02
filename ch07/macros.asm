@@ -67,12 +67,12 @@ PUTC	  MACRO	X,Y,CHAR,ATTRIB
 
 ;-----------------------------------------
 ;功能:在指定位置显示指定颜色的字符串
-;入口参数:以$结束的字符串变量S ；出口参数:无                           
+;入口参数:以$结束的字符串变量S ；出口参数:无
 ;-----------------------------------------
 PUTS	  MACRO ROW,COL,S,ATTRIB
 	LOCAL  EXIT5
 	LOCAL  LOOP10
-	
+
 	PUSHREG
 	MOV    DH,ROW
 	MOV    DL,COL
@@ -90,7 +90,7 @@ LOOP10:	MOV   AL,[BX]
 
 EXIT5:	POPREG
 	   ENDM
-	   
+
 
 DATA	SEGMENT
 	STR   DB  'PRINT A STRING.$'
@@ -99,10 +99,10 @@ DATA 	ENDS
 CODE 	SEGMENT
 	ASSUME	CS:CODE,DS:DATA
 MAIN  	PROC  FAR
-	
+
 	MOV   AX,DATA
 	MOV   DS,AX
-	
+
 	CLRSCRN			;清屏
 	MOV   DH,10H
 	MOV   DL,20H
@@ -110,11 +110,11 @@ MAIN  	PROC  FAR
 
 	PUTC  DH,21H,STR,1FH		;兰底白色字符P
 					;(STR变量中第一个字符)
-	
+
 	INC   DH				 ;行号加1
 	PUTS  DH,DL,STR,1FH		 ;用兰底白字显示字符串
 					 ;PRINT A STRING.
-					 
+
 	MOV   AX,4C00H
 	INT   21H
 MAIN	ENDP

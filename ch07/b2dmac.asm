@@ -1,12 +1,12 @@
-﻿RETURN	MACRO
+RETURN	MACRO
 	MOV	AX,4C00H
 	INT	21H
 	ENDM
 
-	
+
 BIN_DEC	MACRO	ASC,BIN
 	LOCAL	L1,L2
-	
+
 ;16位二进制数－－>十进制数的ASCII码，第一个参数为
 ;五个字节的十进制数缓冲区，第二个参数为要转换的二进制数
 
@@ -49,16 +49,16 @@ MAIN	PROC	FAR
 
 	MOV	AX,DATA
 	MOV	DS,AX
-	
+
 	.XALL
 	BIN_DEC	BUF, 0EEH
 
 	.LALL
 	DISP	BUF
-	
+
 	.SALL
 	RETURN
-	
+
 MAIN	ENDP
 CODE	ENDS
 	END	MAIN

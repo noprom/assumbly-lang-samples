@@ -1,4 +1,4 @@
-CR      	EQU 0DH
+﻿CR      	EQU 0DH
 LF      	EQU 0AH
 BEEP    	EQU 07H
 BACK    	EQU 08H
@@ -13,7 +13,7 @@ START:
 	MOV	AX,CS
         	MOV	DS,AX      
         	LEA	DX,ZDIV
-        	MOV	AX,2500H		;����0���ж�����
+        	MOV	AX,2500H		;设置0号中断向量
         	INT	21H
         	
         	LEA	DX,SIGNON
@@ -21,21 +21,21 @@ START:
         	INT	21H
 	
 	MOV	DX,((PGM_LEN+15)/16)+10H	
-				;����Ҫפ���Ľ���
+				;计算要驻留的节数
 				
-        	MOV	AX,3100H		;������פ��
+        	MOV	AX,3100H		;结束并驻留
        	 INT	21H
 MAIN    ENDP
 
 
 ZDIV    PROC    FAR
-        	PUSH	AX		;����Ĵ���
+        	PUSH	AX		;保存寄存器
 	PUSH	BX
         	PUSH	CX
         	PUSH	DX
         	PUSH	DS
         	
-        	STI			;���ж�
+        	STI			;开中断
         	
  	MOV	AX,CS
         	MOV	DS,AX
@@ -44,16 +44,16 @@ ZDIV0:      LEA	DX,WARN
         	MOV	AH,9
         	INT	21H
 
-ZDIV1:  	MOV	AH,1		;�ȴ�ѡ��
+ZDIV1:  	MOV	AH,1		;等待选择
         	INT	21H
         
-        	SUB	AL,20H		;Сд��ĸת��Ϊ��д
+        	SUB	AL,20H		;小写字母转换为大写
         	CMP	AL,'C'
-        	JE	ZDIV3		;��ΪCת
+        	JE	ZDIV3		;若为C转
         	CMP	AL,'Q'
-        	JE	ZDIV2		;��ΪQת����
+        	JE	ZDIV2		;若为Q转结束
         	
-        	LEA	DX,BAD		;����
+        	LEA	DX,BAD		;否则
         	MOV	AH,9
         	INT	21H
         	JMP	ZDIV0
@@ -65,15 +65,15 @@ ZDIV3:  	LEA	DX,CRLF
         	MOV	AH,9
         	INT	21H
         
-        	CLI			;���ж�
+        	CLI			;关中断
 	
-	POP	DS		;�ָ��Ĵ���
+	POP	DS		;恢复寄存器
 	POP	DX
 	POP	CX
 	POP	BX			
         	POP	AX
         		
-        	IRET			;�жϷ���
+        	IRET			;中断返回
 ZDIV    ENDP
 
 SIGNON      DB  CR,LF,'Divide by zero interrupt handler installed',CR,LF,'$'
@@ -82,7 +82,7 @@ WARN	   DB  CR,LF,'Divide by zero detected.'
 BAD	   DB  BEEP,BACK,' ',BACK,'$'
 CRLF	   DB  CR,LF,'$'
 
-PGM_LEN  EQU $-START		;���ֽ�Ϊ��λ�ĳ��򳤶�
+PGM_LEN  EQU $-START		;以字节为单位的程序长度
 
 CODE	   ENDS
 	   END MAIN

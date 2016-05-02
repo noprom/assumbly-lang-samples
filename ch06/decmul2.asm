@@ -10,7 +10,7 @@ STACKSG   ENDS
 
 DATA    	SEGMENT
 	PROMPT1   DB   CR,LF,'INPUT NUM1:$'
-	PROMPT2   DB   CR,LF,'INPUT NUM2:$'         
+	PROMPT2   DB   CR,LF,'INPUT NUM2:$'
 	ASCIN1  	    DB   5 , ? , 5 DUP(?)
 	ASCIN2  	    DB   5 , ? , 5 DUP(?)
 	BIN1    	    DW	?		;乘数1二进制值
@@ -27,40 +27,40 @@ MAIN    	PROC    FAR
 
         	MOV     AX,DATA
         	MOV     DS,AX
-        	
+
         	LEA      DX,PROMPT1
         	CALL    DISP
-        	
+
         	LEA      DX,ASCIN1
         	CALL    INPUT		;输入乘数1
-        	
+
 	LEA      DX,PROMPT2
-        	CALL    DISP            
-        	
+        	CALL    DISP
+
         	LEA      DX,ASCIN2
         	CALL    INPUT		;输入乘数2
-        	
+
         	LEA      SI,ASCIN1+1		;建立乘数1缓冲区的地址指针
 	CALL  ASC_BIN		;把乘数1转换成二进制数
 	MOV   BIN1,AX		;存乘数1的二进制值
-	
+
 	LEA   SI,ASCIN2+1		;建立乘数2缓冲区的地址指针
 	CALL  ASC_BIN		;把乘数2转换成二进制数
 	MOV   BIN2,AX		;存乘数2的二进制值
-	
+
 	MOV   AX,BIN1
 	MUL   BIN2		;乘数1*乘数2，结果为32位二进制数
-	
+
 	MOV   RSLTLO,AX  		;保存结果的低16位
 	MOV   RSLTHI,DX  		;保存结果的高16位
 	CALL  BIN_ASC		;调用32位二进制数转换成
 				;十进制数子程序
 	LEA   DX,ASCOUT0
 	CALL  DISP	    	;显示十进制乘积
-		
+
 	MOV   AX,4C00H
 	INT   21H
-	
+
 MAIN	ENDP
 
 
@@ -87,20 +87,20 @@ ASC_BIN 	PROC
 
         	XOR   AX,AX
         	MOV   CL,[SI]
-        	XOR   CH,CH     		;CX中为十进制位数      
+        	XOR   CH,CH     		;CX中为十进制位数
         	INC   SI
         	JCXZ  M2
 
 M1:     	MOV     	BX,10
         	MUL     	BX  		;(AX)乘以10
-        	            
+
         	MOV     	BL,[SI]		;得到一位十进制数的ASCII码
         	INC    	SI	    	;修改地址指针
         	AND     	BX,000FH		;把十进制数的ASCII码转换成十进制数
-        	
+
         	ADD     	AX,BX
-	LOOP    	M1              
-	
+	LOOP    	M1
+
 M2:     	RET
 
 ASC_BIN 	ENDP
@@ -112,11 +112,11 @@ BIN_ASC 	PROC
 
         	LEA     	DI,ASC_OUT+9	;DI指向十进制数串的个位
         	MOV     	EBX,10
-        	
+
 	MOV	AX,RSLTHI
 	SHL	EAX,16
 	MOV	AX,RSLTLO	;EAX中为要转换的32位数
-	
+
 C0:	CMP	EAX,0
 	JZ	C1
 	MOV	EDX,0
@@ -125,7 +125,7 @@ C0:	CMP	EAX,0
 	MOV	[DI],DL
 	DEC	DI
 	JMP	C0
-        	
+
 C1:     	RET
 
 BIN_ASC 	ENDP
@@ -133,6 +133,3 @@ BIN_ASC 	ENDP
 
 CODE    	ENDS
         	END     	MAIN
-
-        	
-        	
